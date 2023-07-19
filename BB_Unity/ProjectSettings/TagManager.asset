@@ -8,15 +8,15 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Background
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Map
+  - Player
+  - Player Attack
+  - Enemy
+  - Enemy Attack
+  - Object
   - 
   - 
   - 
