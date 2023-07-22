@@ -2,7 +2,7 @@
 name: "\U0001F4E2Bug report"
 about: 버그 리포트 사항을 입력해주세요.
 title: 설명
-labels: bug
+labels: "\U0001F4E2Bug report"
 assignees: Arkru1204, jesniey11
 
 ---
