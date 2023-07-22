@@ -2,7 +2,7 @@
 name: "\U0001F6A8HOTFIX"
 about: Hotfix 작업 사항을 입력해주세요.
 title: 설명
-labels: bug
+labels: "\U0001F41E BugFix"
 assignees: ''
 
 ---
