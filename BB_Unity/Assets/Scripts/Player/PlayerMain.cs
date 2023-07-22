@@ -10,6 +10,7 @@ public class PlayerMain : MonoBehaviour
 
     private bool isHit = false;
 
+    // -------------인스펙터-------------
     [Header("오브젝트 연결")]
     //[SerializeField]
     //private GameManager gameManager;
@@ -26,10 +27,7 @@ public class PlayerMain : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>(); // 하위 오브젝트
 
-        gameObject.layer = 8;
-        isHit = false;
-
-        spriteRenderer.color = new Color(1, 1, 1, 1);
+        OffHit();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -81,6 +79,7 @@ public class PlayerMain : MonoBehaviour
         isHit = false;
     }
 
+    // -------------외부참조-------------
     public bool IsHit()
     {
         return isHit;
