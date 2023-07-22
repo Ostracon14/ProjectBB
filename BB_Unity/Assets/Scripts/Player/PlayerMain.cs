@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class PlayerMain : MonoBehaviour
 {
-    //public GameManager gameManager;
+    private Rigidbody2D rigid;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
 
-    public float bouncPower = 10f;
-    public float invulnTIme = 0.8f;
+    private bool isHit = false;
 
-    bool isHit = false;
+    [Header("오브젝트 연결")]
+    //[SerializeField]
+    //private GameManager gameManager;
 
-    Rigidbody2D rigid;
-    Animator anim;
-    SpriteRenderer spriteRenderer;
+    [Header("설정")]
+    [SerializeField, Range(0f, 100f)]
+    private float bouncPower = 10f;
+    [SerializeField, Range(0f, 5f)]
+    private float invulnTIme = 0.8f;
 
     void Awake()
     {

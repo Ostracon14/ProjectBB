@@ -1,19 +1,29 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float maxSpeed = 5f;
-    public float jumpPower = 20f;
+    private Rigidbody2D rigid;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
+    private PlayerMain playerMain;
 
-    Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
-    float boxCastMaxDistance = 1.0f;
+    private Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
+    private float boxCastMaxDistance = 1.0f;
 
-    Rigidbody2D rigid;
-    Animator anim;
-    SpriteRenderer spriteRenderer;
-    PlayerMain playerMain;
+    // 입력값 저장 변수
+    private Vector2 moveInput;
+    private bool jumpInput;
+    private bool dashInput;
+    private bool attackInput;
+
+    // 인스펙터
+    [Header("설정")]
+    [SerializeField, Range(0f, 10f)]
+    private float maxSpeed = 5f;
+    [SerializeField, Range(0f, 100f)]
+    private float jumpPower = 20f;
 
     void Awake()
     {
