@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     private bool isDash = false;
     private bool isAttack = false;
 
+    // 이건 어디로 가야하는지 모르겠는 변수
+    private int dashStack = 3;
+    private int dashCoolSec = 5; //성장에 따라 바뀌는값이면 좋겟다^0^
+
     // 박스레이 조절
     private Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
     private float boxCastMaxDistance = 1.0f;
@@ -126,28 +130,29 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (!dashInput || !isMove || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (dashStack <= 0 || !dashInput || !isMove || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
 
         isDash = true;
-        moveSpeed = 0f;
-
+        dashStack -= 1;
         Debug.Log("dash!");
+
+        moveSpeed = 0f; // 대시 중 이동 방지
         rigid.gravityScale = 0f; // 포물선 방지
         rigid.velocity = new Vector2(0f, 0f); // 속도 초기화
 
         rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
-
-        Debug.Log("x축 값 : " + moveInput.x * dashPower + "| y축 값 : " + moveInput.y * dashPower);
-        
-
+       
         StartCoroutine(DashOut(dashSec));
+        StartCoroutine(DashCoolDown(dashCoolSec));
     }
 
-    /*
-     * memo
-     * 대시횟수제한 필요 - 쿨타임식/스택식
-     */
+    // 최대 스택이 아니라면 돌린다
+    // Max값을 지정하고 비교하는 방향으로 코드 수정
+    IEnumerator DashCoolDown(float second) {
+        yield return new WaitForSeconds(second);
+        dashStack += 1;
+    }
 
     IEnumerator DashOut(float second)
     {
