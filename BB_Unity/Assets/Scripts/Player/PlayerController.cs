@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (dashStack <= 0 || !dashInput || !isMove || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (dashStack <= 0 || !dashInput || moveInput.magnitude == 0 || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
 
         isDash = true;
