@@ -104,7 +104,8 @@ public class PlayerController : MonoBehaviour
 
     private void GroundCheck()
     {
-        if (rigid.velocity.y > 0) // 추락이 아닐 때
+        // 추락이 아닐 때
+        if (rigid.velocity.y > 0) 
             return;
 
         //anim.SetBool("isFalling", true); // 점프 없이 낙하
@@ -129,18 +130,33 @@ public class PlayerController : MonoBehaviour
             return;
 
         isDash = true;
+        moveSpeed = 0f;
+
         Debug.Log("dash!");
         rigid.gravityScale = 0f; // 포물선 방지
         rigid.velocity = new Vector2(0f, 0f); // 속도 초기화
-        rigid.AddForce(moveInput * dashPower, ForceMode2D.Impulse);
+
+        rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
+
+        Debug.Log("x축 값 : " + moveInput.x * dashPower + "| y축 값 : " + moveInput.y * dashPower);
+        
 
         StartCoroutine(DashOut(dashSec));
     }
+
+    /*
+     * memo
+     * 대시횟수제한 필요 - 쿨타임식/스택식
+     */
 
     IEnumerator DashOut(float second)
     {
         yield return new WaitForSeconds(second);
         isDash = false;
+        rigid.velocity = new Vector2(0f, -1f);
+
+        yield return new WaitForSeconds(0.1f);
+        moveSpeed = 5f;
         rigid.gravityScale = 1f;
     }
 
