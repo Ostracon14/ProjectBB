@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     private bool isDash = false;
     private bool isAttack = false;
 
+    // 이건 어디로 가야하는지 모르겠는 변수
+    private int dashStack = 3;
+    private int dashCoolSec = 5; //성장에 따라 바뀌는값이면 좋겟다^0^
+
     // 박스레이 조절
     private Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
     private float boxCastMaxDistance = 1.0f;
@@ -104,7 +108,8 @@ public class PlayerController : MonoBehaviour
 
     private void GroundCheck()
     {
-        if (rigid.velocity.y > 0) // 추락이 아닐 때
+        // 추락이 아닐 때
+        if (rigid.velocity.y > 0) 
             return;
 
         //anim.SetBool("isFalling", true); // 점프 없이 낙하
@@ -125,22 +130,38 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (!dashInput || !isMove || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (dashStack <= 0 || !dashInput || moveInput.magnitude == 0 || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
 
         isDash = true;
+        dashStack -= 1;
         Debug.Log("dash!");
+
+        moveSpeed = 0f; // 대시 중 이동 방지
         rigid.gravityScale = 0f; // 포물선 방지
         rigid.velocity = new Vector2(0f, 0f); // 속도 초기화
-        rigid.AddForce(moveInput * dashPower, ForceMode2D.Impulse);
 
+        rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
+       
         StartCoroutine(DashOut(dashSec));
+        StartCoroutine(DashCoolDown(dashCoolSec));
+    }
+
+    // 최대 스택이 아니라면 돌린다
+    // Max값을 지정하고 비교하는 방향으로 코드 수정
+    IEnumerator DashCoolDown(float second) {
+        yield return new WaitForSeconds(second);
+        dashStack += 1;
     }
 
     IEnumerator DashOut(float second)
     {
         yield return new WaitForSeconds(second);
         isDash = false;
+        rigid.velocity = new Vector2(0f, -1f);
+
+        yield return new WaitForSeconds(0.1f);
+        moveSpeed = 5f;
         rigid.gravityScale = 1f;
     }
 
