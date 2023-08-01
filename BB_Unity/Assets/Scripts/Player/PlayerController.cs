@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     // 이건 어디로 가야하는지 모르겠는 변수
     private int dashStack = 3;
     private int dashCoolSec = 5; //성장에 따라 바뀌는값이면 좋겟다^0^
+    private bool isPlatform = false;
 
     // 박스레이 조절
     private Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
@@ -58,14 +59,17 @@ public class PlayerController : MonoBehaviour
         // 플레이어 조작
         Move();
         Jump();
+        DownJump();
         Dash();
         Attack();
 
         // 바닥 체크
         GroundCheck();
 
-        Debug.Log("이것은 Update 입니다!");
-        if (jumpDownInput) { Debug.Log("1"+jumpDownInput);}
+        //Debug.Log("이것은 Update 입니다!");
+        //if (jumpDownInput) { Debug.Log("1"+jumpDownInput);}
+
+        //Debug.Log(isPlatform);
     }
 
     private void GetInput()
@@ -112,6 +116,17 @@ public class PlayerController : MonoBehaviour
         //anim.SetBool("isJumping", true);
     }
 
+    private void DownJump()
+    {
+        if (!jumpDownInput || !isPlatform || isDash || isAttack/* || playerMain.IsHit()*/)
+            return;
+        
+        Debug.Log("아래점프");
+        //Debug.Log(collision.gameObject.name);
+        //if (jumpDownInput) { Debug.Log("1" + jumpDownInput); }
+        
+    }
+
     private void GroundCheck()
     {
         // 추락이 아닐 때
@@ -121,7 +136,7 @@ public class PlayerController : MonoBehaviour
         //anim.SetBool("isFalling", true); // 점프 없이 낙하
 
         // 바닥 판정
-        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground", "BlockOn"));
+        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground"));
         if (rayHit.collider != null) // 바닥 감지를 위해서 레이저
         {
             if (rayHit.distance < 0.9f)
@@ -130,7 +145,16 @@ public class PlayerController : MonoBehaviour
 
                 //anim.SetBool("isJumping", false);
                 //anim.SetBool("isFalling", false);
+
+                if (rayHit.collider.tag == "Platform")
+                {
+                    isPlatform = true;
+                }
             }
+        }
+        else
+        {
+            isPlatform = false;
         }
     }
 
@@ -169,15 +193,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         moveSpeed = 5f;
         rigid.gravityScale = 1f;
-    }
-
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "CanJumpDown"/* && jumpDownInput*/)
-        {
-            Debug.Log("이것은 OnCollision 입니다!");
-            //Debug.Log(collision.gameObject.name);
-        }
     }
 
     private void Attack()

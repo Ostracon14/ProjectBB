@@ -4,8 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - CanJumpDown
-  - CanNotJumpDown
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -19,8 +18,8 @@ TagManager:
   - Enemy
   - Enemy Attack
   - Object
-  - BlockOn
-  - BlockOff
+  - Pass Ground
+  - 
   - 
   - 
   - 
