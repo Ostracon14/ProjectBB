@@ -59,11 +59,13 @@ public class PlayerController : MonoBehaviour
         Move();
         Jump();
         Dash();
-        JumpDown();
         Attack();
 
         // 바닥 체크
         GroundCheck();
+
+        Debug.Log("이것은 Update 입니다!");
+        if (jumpDownInput) { Debug.Log("1"+jumpDownInput);}
     }
 
     private void GetInput()
@@ -72,7 +74,7 @@ public class PlayerController : MonoBehaviour
         jumpInput = Input.GetButtonDown("Jump");
         dashInput = Input.GetButtonDown("Dash");
         attackInput = Input.GetButtonDown("Fire1");
-        jumpDownInput = jumpInput && (moveInput.x == 0 && moveInput.y == -1);
+        jumpDownInput = Input.GetButtonDown("Jump") && Input.GetAxisRaw("Vertical") < 0f;
     }
 
     private void Move()
@@ -100,7 +102,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (!jumpInput || isJump || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (!jumpInput || jumpDownInput || isJump || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
         
         isJump = true;
@@ -119,7 +121,7 @@ public class PlayerController : MonoBehaviour
         //anim.SetBool("isFalling", true); // 점프 없이 낙하
 
         // 바닥 판정
-        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, /*LayerMask.GetMask("Ground")*/LayerMask.GetMask("BlockOn"));
+        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground", "BlockOn"));
         if (rayHit.collider != null) // 바닥 감지를 위해서 레이저
         {
             if (rayHit.distance < 0.9f)
@@ -169,13 +171,13 @@ public class PlayerController : MonoBehaviour
         rigid.gravityScale = 1f;
     }
 
-    private void JumpDown() {
-        //함수의 조건-이동중/공격중/점프대시기타등등...엔 못 내려가게 해야 함?
-        if (!jumpDownInput) 
-            return;
-        
-        //플레이어의 레이어 > JumpDown 가능 레이어와의 충돌을 무시하는 레이어로 변경
-        //OnColisionEnter를 Debug 로 출력한다(현재 충돌중인 오브젝트명)
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "CanJumpDown"/* && jumpDownInput*/)
+        {
+            Debug.Log("이것은 OnCollision 입니다!");
+            //Debug.Log(collision.gameObject.name);
+        }
     }
 
     private void Attack()
