@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     // 이건 어디로 가야하는지 모르겠는 변수
     private int dashStack = 3;
     private int dashCoolSec = 5; //성장에 따라 바뀌는값이면 좋겟다^0^
-    private bool isPlatform = false;
+    private GameObject platformObject = null;
 
     // 박스레이 조절
     private Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
@@ -116,14 +116,14 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isJumping", true);
     }
 
+    // 아래에서 위로 가는거 되면 PlatformPass로 이름바꾸기
     private void DownJump()
     {
-        if (!jumpDownInput || !isPlatform || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (!jumpDownInput || platformObject == null || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
         
-        Debug.Log("아래점프");
-        //Debug.Log(collision.gameObject.name);
-        //if (jumpDownInput) { Debug.Log("1" + jumpDownInput); }
+        Debug.Log("아래점프 ON "+ platformObject.name);
+        platformObject.layer = 12;
         
     }
 
@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
 
                 if (rayHit.collider.tag == "Platform")
                 {
-                    isPlatform = true;
+                    platformObject = rayHit.collider.gameObject;
                 }
                 anim.SetBool("isJumping", false);
                 anim.SetBool("isFalling", false);
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            isPlatform = false;
+            platformObject = null;
         }
     }
 
