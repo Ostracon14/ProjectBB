@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
         else
             rigid.velocity = new Vector2(0f, rigid.velocity.y); // 미끄러짐 방지
 
-        //anim.SetBool("isRunning", isMove);
+        anim.SetBool("isRunning", isMove);
     }
 
     private void Jump()
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
 
         //rigid.velocity = new Vector2(rigid.velocity.x, 0); // Y축 속도 초기화
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        //anim.SetBool("isJumping", true);
+        anim.SetBool("isJumping", true);
     }
 
     private void DownJump()
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
         if (rigid.velocity.y > 0) 
             return;
 
-        //anim.SetBool("isFalling", true); // 점프 없이 낙하
+        anim.SetBool("isFalling", true); // 점프 없이 낙하
 
         // 바닥 판정
         RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground"));
@@ -143,13 +143,12 @@ public class PlayerController : MonoBehaviour
             {
                 isJump = false;
 
-                //anim.SetBool("isJumping", false);
-                //anim.SetBool("isFalling", false);
-
                 if (rayHit.collider.tag == "Platform")
                 {
                     isPlatform = true;
                 }
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isFalling", false);
             }
         }
         else
@@ -165,21 +164,23 @@ public class PlayerController : MonoBehaviour
 
         isDash = true;
         dashStack -= 1;
-        Debug.Log("dash!");
+        //Debug.Log("dash!");
 
         moveSpeed = 0f; // 대시 중 이동 방지
         rigid.gravityScale = 0f; // 포물선 방지
         rigid.velocity = new Vector2(0f, 0f); // 속도 초기화
 
         rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
-       
+        anim.SetBool("isDashing", true);
+
         StartCoroutine(DashOut(dashSec));
         StartCoroutine(DashCoolDown(dashCoolSec));
     }
 
     // 최대 스택이 아니라면 돌린다
     // Max값을 지정하고 비교하는 방향으로 코드 수정
-    IEnumerator DashCoolDown(float second) {
+    IEnumerator DashCoolDown(float second)
+    {
         yield return new WaitForSeconds(second);
         dashStack += 1;
     }
@@ -193,6 +194,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         moveSpeed = 5f;
         rigid.gravityScale = 1f;
+        anim.SetBool("isDashing", false);
     }
 
     private void Attack()
