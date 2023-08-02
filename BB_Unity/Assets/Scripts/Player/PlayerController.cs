@@ -65,11 +65,6 @@ public class PlayerController : MonoBehaviour
 
         // 바닥 체크
         GroundCheck();
-
-        //Debug.Log("이것은 Update 입니다!");
-        //if (jumpDownInput) { Debug.Log("1"+jumpDownInput);}
-
-        //Debug.Log(isPlatform);
     }
 
     private void GetInput()
@@ -99,7 +94,8 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(moveInput.x, transform.localScale.y, transform.localScale.z);
         }
         else
-            rigid.velocity = new Vector2(0f, rigid.velocity.y); // 미끄러짐 방지
+            // 미끄러짐 방지
+            rigid.velocity = new Vector2(0f, rigid.velocity.y);
 
         anim.SetBool("isRunning", isMove);
     }
@@ -124,7 +120,19 @@ public class PlayerController : MonoBehaviour
         
         Debug.Log("아래점프 ON "+ platformObject.name);
         platformObject.layer = 12;
-        
+
+        // 이부분 if조건문 지저분해서 정리하고싶음
+        /*if (Mathf.Abs(gameObject.transform.position.y - platformObject.transform.position.y) > 0.7)
+        {
+            platformObject.layer = 6;
+        }*/
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Debug.Log("아래점프 ON " + platformObject.name);
+        if (platformObject != null) { platformObject.layer = 6; }
     }
 
     private void GroundCheck()
@@ -133,7 +141,8 @@ public class PlayerController : MonoBehaviour
         if (rigid.velocity.y > 0) 
             return;
 
-        anim.SetBool("isFalling", true); // 점프 없이 낙하
+        // 점프 없이 낙하
+        anim.SetBool("isFalling", true);
 
         // 바닥 판정
         RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground"));
@@ -166,9 +175,10 @@ public class PlayerController : MonoBehaviour
         dashStack -= 1;
         //Debug.Log("dash!");
 
-        moveSpeed = 0f; // 대시 중 이동 방지
-        rigid.gravityScale = 0f; // 포물선 방지
-        rigid.velocity = new Vector2(0f, 0f); // 속도 초기화
+        // 대시 중 이동/포물선/가속 방지
+        moveSpeed = 0f;
+        rigid.gravityScale = 0f;
+        rigid.velocity = new Vector2(0f, 0f);
 
         rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
         anim.SetBool("isDashing", true);
