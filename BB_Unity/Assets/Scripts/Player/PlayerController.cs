@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
         if (!jumpDownInput || platformObject == null || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
         
-        Debug.Log("아래점프 ON "+ platformObject.name);
+        Debug.Log("아래점프 ON " + platformObject.name);
         platformObject.layer = 12;
 
         // 이부분 if조건문 지저분해서 정리하고싶음
@@ -129,10 +129,17 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("아래점프 ON " + platformObject.name);
-        if (platformObject != null) { platformObject.layer = 6; }
+        if (collision.gameObject == platformObject)
+        {
+            Debug.Log("아래점프 OFF " + platformObject.name);
+            if (platformObject != null)
+            {
+                platformObject.layer = 6;
+                platformObject = null;
+            }
+        }
     }
 
     private void GroundCheck()
@@ -160,10 +167,10 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("isFalling", false);
             }
         }
-        else
-        {
-            platformObject = null;
-        }
+        //else
+        //{
+        //    platformObject = null;
+        //}
     }
 
     private void Dash()
