@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 72475353}
   - component: {fileID: 72475354}
   - component: {fileID: 72475355}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: 3F
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -664,7 +664,7 @@ GameObject:
   - component: {fileID: 625579810}
   - component: {fileID: 625579811}
   - component: {fileID: 625579812}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: 2F
   m_TagString: Platform
   m_Icon: {fileID: 0}

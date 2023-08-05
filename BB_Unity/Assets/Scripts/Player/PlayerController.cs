@@ -122,24 +122,11 @@ public class PlayerController : MonoBehaviour
         platformObject.layer = 12;
 
         // 이부분 if조건문 지저분해서 정리하고싶음
-        /*if (Mathf.Abs(gameObject.transform.position.y - platformObject.transform.position.y) > 0.7)
-        {
-            platformObject.layer = 6;
-        }*/
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject == platformObject)
-        {
-            Debug.Log("아래점프 OFF " + platformObject.name);
-            if (platformObject != null)
-            {
-                platformObject.layer = 6;
-                platformObject = null;
-            }
-        }
+        //if (Mathf.Abs(transform.position.y - platformObject.transform.position.y) > 0.7)
+        //{
+        //    platformObject.layer = 6;
+        //    platformObject = null;
+        //}
     }
 
     private void GroundCheck()
@@ -152,25 +139,30 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isFalling", true);
 
         // 바닥 판정
-        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground"));
+        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground", "Pass Ground"));
         if (rayHit.collider != null) // 바닥 감지를 위해서 레이저
         {
             if (rayHit.distance < 0.9f)
             {
                 isJump = false;
 
-                if (rayHit.collider.tag == "Platform")
+                if (platformObject == null && rayHit.collider.tag == "Platform")
                 {
                     platformObject = rayHit.collider.gameObject;
+                    platformObject.layer = 6;
                 }
                 anim.SetBool("isJumping", false);
                 anim.SetBool("isFalling", false);
             }
         }
-        //else
-        //{
-        //    platformObject = null;
-        //}
+        else
+        {
+            if (platformObject != null)
+            {
+                platformObject.layer = 12;
+                platformObject = null;
+            }
+        }
     }
 
     private void Dash()
