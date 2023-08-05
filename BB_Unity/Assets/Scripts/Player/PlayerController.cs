@@ -24,8 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool isAttack = false;
 
     // 이건 어디로 가야하는지 모르겠는 변수
-    private int dashStack = 3;
-    private int dashCoolSec = 5; //성장에 따라 바뀌는값이면 좋겟다^0^
+    
     private GameObject platformObject = null;
 
     // 박스레이 조절
@@ -42,6 +41,10 @@ public class PlayerController : MonoBehaviour
     private float dashPower = 20f;
     [SerializeField, Range(0f, 1f)]
     private float dashSec = 0.2f;
+    [SerializeField, Range(0, 10)]
+    private int dashStack = 3;
+    [SerializeField, Range(0f, 10f)]
+    private float dashCoolSec = 3f; //성장에 따라 바뀌는값이면 좋겟다^0^
 
     void Awake()
     {
