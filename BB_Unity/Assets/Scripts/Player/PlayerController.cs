@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
     private bool dashInput;
     private bool attackInput;
+    private bool jumpDownInput;
 
     // 동작 확인 변수
     private bool isMove = false;
@@ -22,8 +24,8 @@ public class PlayerController : MonoBehaviour
     private bool isAttack = false;
 
     // 이건 어디로 가야하는지 모르겠는 변수
-    private int dashStack = 3;
-    private int dashCoolSec = 5; //성장에 따라 바뀌는값이면 좋겟다^0^
+    
+    private GameObject platformObject = null;
 
     // 박스레이 조절
     private Vector2 boxCastSize = new Vector2(0.6f, 0.05f);
@@ -39,6 +41,10 @@ public class PlayerController : MonoBehaviour
     private float dashPower = 20f;
     [SerializeField, Range(0f, 1f)]
     private float dashSec = 0.2f;
+    [SerializeField, Range(0, 10)]
+    private int dashStack = 3;
+    [SerializeField, Range(0f, 10f)]
+    private float dashCoolSec = 3f; //성장에 따라 바뀌는값이면 좋겟다^0^
 
     void Awake()
     {
@@ -56,6 +62,7 @@ public class PlayerController : MonoBehaviour
         // 플레이어 조작
         Move();
         Jump();
+        DownJump();
         Dash();
         Attack();
 
@@ -69,6 +76,7 @@ public class PlayerController : MonoBehaviour
         jumpInput = Input.GetButtonDown("Jump");
         dashInput = Input.GetButtonDown("Dash");
         attackInput = Input.GetButtonDown("Fire1");
+        jumpDownInput = Input.GetButtonDown("Jump") && Input.GetAxisRaw("Vertical") < 0f;
     }
 
     private void Move()
@@ -89,14 +97,15 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(moveInput.x, transform.localScale.y, transform.localScale.z);
         }
         else
-            rigid.velocity = new Vector2(0f, rigid.velocity.y); // 미끄러짐 방지
+            // 미끄러짐 방지
+            rigid.velocity = new Vector2(0f, rigid.velocity.y);
 
         anim.SetBool("isRunning", isMove);
     }
 
     private void Jump()
     {
-        if (!jumpInput || isJump || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (!jumpInput || jumpDownInput || isJump || isDash || isAttack/* || playerMain.IsHit()*/)
             return;
         
         isJump = true;
@@ -106,24 +115,55 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isJumping", true);
     }
 
+    // 아래에서 위로 가는거 되면 PlatformPass로 이름바꾸기
+    private void DownJump()
+    {
+        if (!jumpDownInput || platformObject == null || isDash || isAttack/* || playerMain.IsHit()*/)
+            return;
+        
+        Debug.Log("아래점프 ON " + platformObject.name);
+        platformObject.layer = 12;
+
+        // 이부분 if조건문 지저분해서 정리하고싶음
+        //if (Mathf.Abs(transform.position.y - platformObject.transform.position.y) > 0.7)
+        //{
+        //    platformObject.layer = 6;
+        //    platformObject = null;
+        //}
+    }
+
     private void GroundCheck()
     {
         // 추락이 아닐 때
         if (rigid.velocity.y > 0) 
             return;
 
-        anim.SetBool("isFalling", true); // 점프 없이 낙하
+        // 점프 없이 낙하
+        anim.SetBool("isFalling", true);
 
         // 바닥 판정
-        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground"));
+        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, boxCastSize, 0f, Vector2.down, boxCastMaxDistance, LayerMask.GetMask("Ground", "Pass Ground"));
         if (rayHit.collider != null) // 바닥 감지를 위해서 레이저
         {
             if (rayHit.distance < 0.9f)
             {
                 isJump = false;
 
+                if (platformObject == null && rayHit.collider.tag == "Platform")
+                {
+                    platformObject = rayHit.collider.gameObject;
+                    platformObject.layer = 6;
+                }
                 anim.SetBool("isJumping", false);
                 anim.SetBool("isFalling", false);
+            }
+        }
+        else
+        {
+            if (platformObject != null)
+            {
+                platformObject.layer = 12;
+                platformObject = null;
             }
         }
     }
@@ -137,9 +177,10 @@ public class PlayerController : MonoBehaviour
         dashStack -= 1;
         //Debug.Log("dash!");
 
-        moveSpeed = 0f; // 대시 중 이동 방지
-        rigid.gravityScale = 0f; // 포물선 방지
-        rigid.velocity = new Vector2(0f, 0f); // 속도 초기화
+        // 대시 중 이동/포물선/가속 방지
+        moveSpeed = 0f;
+        rigid.gravityScale = 0f;
+        rigid.velocity = new Vector2(0f, 0f);
 
         rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
         anim.SetBool("isDashing", true);
