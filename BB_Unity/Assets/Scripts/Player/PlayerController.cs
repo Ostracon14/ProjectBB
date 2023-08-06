@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
     private bool dashInput;
     private bool attackInput;
-    private bool jumpDownInput;
+    private bool platformPassInput;
 
     // 동작 확인 변수
     private bool isMove = false;
@@ -41,13 +42,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(0f, 100f)]
     private float dashPower = 20f;
     [SerializeField, Range(0f, 1f)]
-    private float dashSec = 0.2f;
+    private float dashTime = 0.2f;
     [SerializeField, Range(0, 10)]
     private int dashStack = 3;
     [SerializeField, Range(0f, 10f)]
-    private float dashCoolSec = 3f;
+    private float dashCoolTime = 3f;
     [SerializeField, Range(0f, 10f)]
-    private float attackCoolSec = 2f;
+    private float attackCoolTime = 2f;
 
     void Awake()
     {
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
         // 플레이어 조작
         Move();
         Jump();
-        DownJump();
+        PlatformPass();
         Dash();
         Attack();
 
@@ -88,7 +89,7 @@ public class PlayerController : MonoBehaviour
         jumpInput = Input.GetButtonDown("Jump");
         dashInput = Input.GetButtonDown("Dash");
         attackInput = Input.GetButtonDown("Fire1");
-        jumpDownInput = Input.GetButtonDown("Jump") && Input.GetAxisRaw("Vertical") < 0f;
+        platformPassInput = Input.GetButtonDown("Jump") && Input.GetAxisRaw("Vertical") < 0f;
     }
 
     private void Move()
@@ -119,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (!jumpInput || jumpDownInput || isJump || isDash || isAttack || isHit)
+        if (!jumpInput || platformPassInput || isJump || isDash || isAttack || isHit)
             return;
         
         isJump = true;
@@ -130,20 +131,13 @@ public class PlayerController : MonoBehaviour
     }
 
     // 아래에서 위로 가는거 되면 PlatformPass로 이름바꾸기
-    private void DownJump()
+    private void PlatformPass()
     {
-        if (!jumpDownInput || platformObject == null || isDash || isAttack || isHit)
+        if (!platformPassInput || platformObject == null || isDash || isAttack || isHit)
             return;
         
         Debug.Log("아래점프 ON " + platformObject.name);
         platformObject.layer = 12;
-
-        // 이부분 if조건문 지저분해서 정리하고싶음
-        //if (Mathf.Abs(transform.position.y - platformObject.transform.position.y) > 0.7)
-        //{
-        //    platformObject.layer = 6;
-        //    platformObject = null;
-        //}
     }
 
     private void GroundCheck()
@@ -199,8 +193,8 @@ public class PlayerController : MonoBehaviour
         rigid.AddForce(moveInput.normalized * dashPower, ForceMode2D.Impulse);
         anim.SetBool("isDashing", true);
 
-        StartCoroutine(DashOut(dashSec));
-        StartCoroutine(DashCoolDown(dashCoolSec));
+        StartCoroutine(DashOut(dashTime));
+        StartCoroutine(DashCoolDown(dashCoolTime));
     }
 
     // 최대 스택이 아니라면 돌린다
@@ -231,7 +225,7 @@ public class PlayerController : MonoBehaviour
         isAttack = true;
         anim.SetTrigger("doAttack");
 
-        StartCoroutine(AttackCoolOut(attackCoolSec));
+        StartCoroutine(AttackCoolOut(attackCoolTime));
     }
 
     IEnumerator AttackCoolOut(float second)
