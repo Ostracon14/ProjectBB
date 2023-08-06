@@ -22,9 +22,10 @@ public class PlayerController : MonoBehaviour
     private bool isJump = false;
     private bool isDash = false;
     private bool isAttack = false;
+    private bool isHit = false;
+    private bool isDead = false;
 
-    // 이건 어디로 가야하는지 모르겠는 변수
-    
+    // 플랫폼 저장
     private GameObject platformObject = null;
 
     // 박스레이 조절
@@ -44,7 +45,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(0, 10)]
     private int dashStack = 3;
     [SerializeField, Range(0f, 10f)]
-    private float dashCoolSec = 3f; //성장에 따라 바뀌는값이면 좋겟다^0^
+    private float dashCoolSec = 3f;
+    [SerializeField, Range(0f, 10f)]
+    private float attackCoolSec = 2f;
 
     void Awake()
     {
@@ -56,6 +59,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // 피격/사망 체크
+        CheckState();
+
         // 입력 값 저장
         GetInput();
 
@@ -70,6 +76,12 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
     }
 
+    private void CheckState()
+    {
+        isHit = playerMain.GetIsHit();
+        isDead = playerMain.GetIsDead();
+    }
+
     private void GetInput()
     {
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -81,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (isDash/*playerMain.IsHit()*/)
+        if (isDash || isHit)
             return;
 
         //isMove = moveInput.magnitude != 0;
@@ -97,15 +109,17 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(moveInput.x, transform.localScale.y, transform.localScale.z);
         }
         else
+        {
             // 미끄러짐 방지
             rigid.velocity = new Vector2(0f, rigid.velocity.y);
+        }
 
         anim.SetBool("isRunning", isMove);
     }
 
     private void Jump()
     {
-        if (!jumpInput || jumpDownInput || isJump || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (!jumpInput || jumpDownInput || isJump || isDash || isAttack || isHit)
             return;
         
         isJump = true;
@@ -118,7 +132,7 @@ public class PlayerController : MonoBehaviour
     // 아래에서 위로 가는거 되면 PlatformPass로 이름바꾸기
     private void DownJump()
     {
-        if (!jumpDownInput || platformObject == null || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (!jumpDownInput || platformObject == null || isDash || isAttack || isHit)
             return;
         
         Debug.Log("아래점프 ON " + platformObject.name);
@@ -170,7 +184,7 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (dashStack <= 0 || !dashInput || moveInput.magnitude == 0 || isDash || isAttack/* || playerMain.IsHit()*/)
+        if (dashStack <= 0 || !dashInput || moveInput.magnitude == 0 || isDash || isAttack || isHit)
             return;
 
         isDash = true;
@@ -211,13 +225,26 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        //if (playerMain.IsHit())
-        //    return;
+        if (!attackInput || isAttack || !isDash || isHit)
+            return;
 
-        // 공격 (현재 실행 중인 애니메이션이 공격이 아니면)
-        if (Input.GetButtonDown("Fire1")/* && !anim.GetCurrentAnimatorStateInfo(0).IsName("Player1_AttackFront")*/)
-            anim.SetTrigger("doAttack");
+        isAttack = true;
+        anim.SetTrigger("doAttack");
+
+        StartCoroutine(AttackCoolOut(attackCoolSec));
     }
+
+    IEnumerator AttackCoolOut(float second)
+    {
+        yield return new WaitForSeconds(second);
+        isAttack = false;
+    }
+
+    // -------------외부참조-------------
+
+
+
+    // -------------기타-------------
 
     //void OnDrawGizmos() // 사각 레이 기즈모
     //{
