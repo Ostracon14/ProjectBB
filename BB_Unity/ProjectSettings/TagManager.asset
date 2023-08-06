@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Platform
+  - Enemy
+  - Enemy Attack
+  - Player Attack
+  - Trap
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -19,8 +24,8 @@ TagManager:
   - Enemy Attack
   - Object
   - Pass Ground
-  - 
-  - 
+  - Super Armor
+  - Trap
   - 
   - 
   - 
@@ -51,6 +56,12 @@ TagManager:
   - name: Object
     uniqueID: 4244937623
     locked: 0
+  - name: Enemy
+    uniqueID: 2311522169
+    locked: 0
   - name: Player
     uniqueID: 999820979
+    locked: 0
+  - name: Trap
+    uniqueID: 453431887
     locked: 0
