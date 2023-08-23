@@ -8,12 +8,14 @@ public class PlayerMain : MonoBehaviour
     private Animator anim;
     private SpriteRenderer[] spriteRenderers;
 
+    /* --------------- 스프라이트 -------------- */
     private int spriteLen = 0;
 
+    /* ------------ 동작 확인 변수 ------------- */
     private bool isHit = false;
     private bool isDead = false;
 
-    // -------------인스펙터-------------
+    /* ---------------- 인스펙터 --------------- */
     [Header("오브젝트 연결")]
     //[SerializeField]
     //private GameManager gameManager;
@@ -88,7 +90,7 @@ public class PlayerMain : MonoBehaviour
         isHit = false;
     }
 
-    // -------------외부참조-------------
+    /* -------------외부참조------------- */
     public bool GetIsHit()
     {
         return isHit;
