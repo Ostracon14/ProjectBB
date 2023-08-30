@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 4966186514213975661}
   - component: {fileID: 4966186514213975660}
   - component: {fileID: 4966186514213975662}
-  m_Layer: 0
+  - component: {fileID: 4562862401216237759}
+  - component: {fileID: 2948249009654171043}
+  m_Layer: 9
   m_Name: Test Enemy A
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4966186514213975658}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.22, y: -2.93, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
@@ -93,6 +95,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4562862401216237759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4966186514213975658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54d8700be8a18d4e9665ffa000e4e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 2
+  bouncPower: 3
+  invulnTime: 0.5
+--- !u!114 &2948249009654171043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4966186514213975658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad7726d04510dce46b5f5907f383af9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 2.5
+  raycastDistance: 1
 --- !u!1 &4966186515358637706
 GameObject:
   m_ObjectHideFlags: 0
