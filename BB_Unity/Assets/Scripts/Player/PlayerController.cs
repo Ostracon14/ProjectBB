@@ -228,9 +228,10 @@ public class PlayerController : MonoBehaviour
 
     private void Attack()
     {
-        if (!attackInput || isAttack || !isDash || isHit)
+        if (!attackInput || isAttack || isDash || isHit)
             return;
 
+        Debug.Log("Attack");
         isAttack = true;
         anim.SetTrigger("doAttack");
 
