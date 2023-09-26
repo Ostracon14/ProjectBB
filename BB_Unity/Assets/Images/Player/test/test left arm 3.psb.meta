@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -88,7 +90,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
@@ -229,7 +230,6 @@ ScriptedImporter:
     - {x: 6, y: 7}
     - {x: 7, y: 8}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 348, y: 245}
     spritePosition: {x: 560, y: 388}
   - name: "\uBA38\uB9AC \uBCF5\uC0AC"
@@ -634,7 +634,6 @@ ScriptedImporter:
     - {x: 31, y: 32}
     - {x: 32, y: 33}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 4}
     spritePosition: {x: 346, y: 482}
   - name: "\uD3141 \uBCF5\uC0AC"
@@ -960,7 +959,6 @@ ScriptedImporter:
     - {x: 23, y: 24}
     - {x: 24, y: 25}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 348, y: 4}
     spritePosition: {x: 344, y: 251}
   - name: "\uB808\uC774\uC5B4 1 \uBCF5\uC0AC"
@@ -1414,7 +1412,6 @@ ScriptedImporter:
     - {x: 33, y: 34}
     - {x: 34, y: 35}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 356}
     spritePosition: {x: 388, y: 202}
   - name: "\uD3142 \uBCF5\uC0AC"
@@ -1731,7 +1728,6 @@ ScriptedImporter:
     - {x: 23, y: 24}
     - {x: 24, y: 25}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 853}
     spritePosition: {x: 512, y: 376}
   - name: "\uD3142 \uBCF5\uC0AC 2"
@@ -2048,7 +2044,6 @@ ScriptedImporter:
     - {x: 23, y: 24}
     - {x: 24, y: 25}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 671}
     spritePosition: {x: 547, y: 258}
   - name: "\uB2E4\uB9AC1 \uBCF5\uC0AC"
@@ -2473,7 +2468,6 @@ ScriptedImporter:
     - {x: 32, y: 33}
     - {x: 33, y: 34}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 259, y: 356}
     spritePosition: {x: 414, y: 119}
   - name: "\uB2E4\uB9AC2 \uBCF5\uC0AC"
@@ -2876,7 +2870,6 @@ ScriptedImporter:
     - {x: 30, y: 31}
     - {x: 31, y: 32}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 141, y: 671}
     spritePosition: {x: 520, y: 130}
   - name: "\uB0481 \uBCF5\uC0AC"
@@ -3149,7 +3142,6 @@ ScriptedImporter:
     - {x: 19, y: 20}
     - {x: 20, y: 21}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 984}
     spritePosition: {x: 493, y: 157}
   - name: "\uB0482 \uBCF5\uC0AC"
@@ -3422,7 +3414,6 @@ ScriptedImporter:
     - {x: 19, y: 20}
     - {x: 20, y: 21}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 35, y: 984}
     spritePosition: {x: 517, y: 163}
   - name: "\uB808\uC774\uC5B4 1"
@@ -3444,7 +3435,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 63, y: 984}
     spritePosition: {x: 0, y: 1000}
   characterData:
@@ -3668,6 +3658,7 @@ ScriptedImporter:
       order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -3675,6 +3666,7 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings: []
   mosaicLayers: 1
@@ -3687,6 +3679,8 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -3835,6 +3829,9 @@ ScriptedImporter:
     isVisible: 0
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 
